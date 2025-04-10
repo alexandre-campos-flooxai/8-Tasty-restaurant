@@ -18,8 +18,12 @@
     <div class="box">
       <div class="box-header">
         <h3 class="box-title">Lista</h3>
-        <a href="#" class="btn btn-xs pull-right btn-success"data-toggle="modal" 
-        data-target="#modal-create">
+        <a
+          href="#"
+          class="btn btn-xs pull-right btn-success"
+          data-toggle="modal"
+          data-target="#modal-create"
+        >
           ><i class="fa fa-plus"></i> Novo</a
         >
       </div>
@@ -80,10 +84,7 @@
               <td><%= moment(row.date).format("DD [de] MMMM [de] YYYY") %></td>
               <td><%= row.time %></td>
               <td>
-                <button
-                  type="button"
-                  class="btn btn-xs btn-info btn-update"
-                >
+                <button type="button" class="btn btn-xs btn-info btn-update">
                   <i class="fa fa-pencil"></i> Editar</button
                 >&nbsp;<button
                   type="button"
@@ -283,14 +284,18 @@
 <script src="/js/hcode-grid.js"></script>
 <script>
   new HcodeGrid({
-    deleteUrl:'/admin/reservations/${data.id}',
-    deleteMsg:'Deseja realmente excluir a reserva de ${data.name}?',
-    listeners:{
-      afterUpdateClick:(e) =>{
-        console.log('Listener afterUpdateClick chamado', e);
-        alert('edit')
-      }
-    }
-  });
+    deleteUrl: "/admin/reservations/${data.id}",
+    deleteMsg: "Deseja realmente excluir a reserva de ${data.name}?",
+    onUpdateLoad: (formUpdate, name, data) => {
+      let input = formUpdate.querySelector(`[name=${name}]`);
 
+      switch (name) {
+        case "date":
+          if (input) input.value = moment(data[name]).format("YYYY-MM-DD");
+          break;
+        default:
+          if (input) input.value = data[name];
+      }
+    },
+  });
 </script>
