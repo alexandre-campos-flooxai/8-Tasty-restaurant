@@ -242,12 +242,30 @@
     console.log(err)
   });
 
-  [...document.querySelectorAll(".btn-update")].forEach((btn) => {
-    console.log(btn)
+  [...document.querySelectorAll('.btn-delete')].forEach(btn=>{
     btn.addEventListener('click', e=>{
       let tr = e.composedPath().find(el =>{
         return (el.tagName.toUpperCase() === 'TR')
-        console.log(tr)
+      })
+      console.log(tr)
+      let data = JSON.parse(tr.dataset.row);
+
+      if(confirm(`Deseja realmente excluir o menu ${data.title}?`))
+      
+      fetch(`/admin/menus/${data.id}`,{
+        method:"DELETE"
+      }).then(response => response.json())
+        .then(json =>{
+          console.log(json)
+        })
+    })
+  });
+
+
+  [...document.querySelectorAll(".btn-update")].forEach((btn) => {
+    btn.addEventListener('click', e=>{
+      let tr = e.composedPath().find(el =>{
+        return (el.tagName.toUpperCase() === 'TR')
       })
       let data = JSON.parse(tr.dataset.row);
       for(let name in data){
