@@ -33,7 +33,7 @@ module.exports = {
             SET
               name = ?,
               email = ?,
-              people = ?
+              people = ?,
               date = ?,
               time = ?
             WHERE id = ?
@@ -53,6 +53,40 @@ module.exports = {
           resolve(results);
         }
       });
+    });
+  },
+
+  getReservations() {
+    return new Promise((resolve, reject) => {
+      conn.query(
+        `
+            SELECT * FROM tb_reservations ORDER BY date DESC
+        `,
+        (err, results) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(results);
+        }
+      );
+    });
+  },
+
+  delete(id) {
+    return new Promise((resolve, reject) => {
+      conn.query(
+        `
+          DELETE FROM tb_reservations WHERE id = ?
+        `,
+        [id],
+        (err, results) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(results);
+          }
+        }
+      );
     });
   },
 };
