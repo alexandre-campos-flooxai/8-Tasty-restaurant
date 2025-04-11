@@ -1,3 +1,4 @@
+const { text } = require('express');
 let conn = require('./db');
 
 class Pagination {
@@ -45,8 +46,66 @@ class Pagination {
         return this.currentPage;
     }
 
-    getTotalPage(){
+    getTotalPages(){
         return this.totalPage
+    }
+
+    getNavigation(params){
+        let limitPageNav = 5;
+        let links = [];
+        let nrstart = 0;
+        let nrend = 0;
+
+        if(this.getTotalPages() < limitPageNav){
+            limitPageNav = this.getTotalPages
+        }
+
+        // Se está nas primeiras páginas
+        if((this.getCurrentPage() - parseInt(limitPageNav/2)) < 1){
+            nrstart = 1;
+            nrend = limitPageNav;
+        }
+        //Se esta chegando nas últimas páginas.
+        else if((this.getCurrentPage() + parseInt(limitPageNav/1)) > this.getTotalPages()){
+            nrstart = this.getTotalPages() - limitPageNav;
+            nrend = this.getTotalPages();
+        }else{
+            nrstart = (this.getCurrentPage() - parseInt(limitPageNav/2));
+            nrend = (this.getCurrentPage() + parseInt(limitPageNav/2));
+        }
+
+        if(this.getCurrentPage() >1){
+            links.push({
+                text:'<',
+                href:'?' +  this.getQueryString(Object.assign({},params,{
+                    page: this.getCurrentPage() -1}))
+            })
+        }
+
+        for(let x = nrstart; x <= nrend; x++){
+            links.push({
+                text: x,
+                href:'?' + this.getQueryString(Object.assign({},params,{page: x})),
+                active:(x === this.getCurrentPage())
+            });
+        }
+        if(this.getCurrentPage() < this.getCurrentPage()){
+            links.push({
+                text:'>',
+                href:'?' +  this.getQueryString(Object.assign({},
+                    params,{page: this.getCurrentPage() + 1}))
+            })
+        }
+        return links;
+    }
+
+    getQueryString(params){
+        let queryString = [];
+
+        for(let name in params){
+            queryString.push(`${name}=${params[name]}`);
+        }
+        return queryString.join('&');
     }
 
 }
