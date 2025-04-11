@@ -24,16 +24,16 @@ class HcodeGrid {
       configs.listeners
     );
 
-    this.options = Object.assign(
-      {},
-      {
+    this.options = Object.assign({},{
         formCreate: "#modal-create form",
         formUpdate: "#modal-update form",
         btnUpdate: ".btn-update",
         btnDelete: ".btn-delete",
-      },
-      configs
-    );
+        onUpdateLoad:(form,name,data) =>{
+          let input = form.querySelector('[name='+name+']');
+          if(input) input.value = data[name];
+        }
+      },configs);
 
     this.initForms();
     this.initButtons();
@@ -84,21 +84,7 @@ class HcodeGrid {
         let data = this.getTrData(e);
 
         for (let name in data) {
-
           this.options.onUpdateLoad(this.formUpdate, name, data);
-
-          let input = this.formUpdate.querySelector(`[name=${name}]`);
-
-          switch (name) {
-            case "date":
-              if (input) input.value = moment(data[name]).format("YYYY-MM-DD");
-              break;
-              case 'photo':
-              this.formUpdate.querySelector('img').src = '/'+data[name];
-              break;
-            default:
-              if (input) input.value = data[name];
-          }
         }
         console.log(data);
         //$('#modal-update').modal('show')
