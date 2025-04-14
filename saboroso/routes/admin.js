@@ -197,7 +197,7 @@ router.get("/users", function (req, res, next) {
 
 router.post("/users", function (req, res, next) {
   users
-    .save(req.file)
+    .save(req.fields)
     .then((results) => {
       res.send(results);
     })

@@ -120,8 +120,8 @@ module.exports = {
             FROM tb_reservations
             WHERE
                date BETWEEN ? AND ?
-            GROUP BY YEAR(date) DESC, MONTH(date) DESC
-            ORDER BY YEAR(date) DESC, MONTH(date) DESC;
+            GROUP BY CONCAT(YEAR(date), '-', MONTH(date))
+            ORDER BY date DESC;
         `,[
           req.query.start,
           req.query.end,

@@ -64,12 +64,12 @@ module.exports = {
         query = `
             UPDATE tb_users
             SET name = ?,
-              email = ?,
+              email = ?
             WHERE id = ?
         `;
       } else {
         query = `INSERT INTO tb_users (name, email, password) 
-        VALUES(?, ?, ?, )
+        VALUES(?, ?, ? )
         `;
         params.push(fields.password)
       }
